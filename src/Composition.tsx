@@ -6,21 +6,7 @@ import {
   spring,
   useVideoConfig,
 } from "remotion";
-import { Lyrics } from "./schema";
-
-interface LyricLine {
-  text: string;
-  startFrame: number;
-  endFrame: number;
-}
-
-interface LyricsProps {
-  lyrics: Lyrics;
-  fontFamily?: string;
-  backgroundColor?: string;
-  textColor?: string;
-  highlightColor?: string;
-}
+import { Lyric, LyricsProps } from "./schema";
 
 export const MyComposition: React.FC<LyricsProps> = ({
   lyrics,
@@ -39,11 +25,7 @@ export const MyComposition: React.FC<LyricsProps> = ({
 
   const nextLyric = lyrics[currentLyricIndex + 1];
 
-  const renderLyricLine = (
-    lyric: LyricLine,
-    isActive: boolean,
-    index: number,
-  ) => {
+  const renderLyricLine = (lyric: Lyric, isActive: boolean, index: number) => {
     const isNext = nextLyric && nextLyric.text === lyric.text;
     const isPrevious = index === currentLyricIndex - 1;
 
@@ -97,14 +79,17 @@ export const MyComposition: React.FC<LyricsProps> = ({
           color: isActive ? textColor : `${textColor}${isNext ? "CC" : "80"}`,
           textAlign: "center",
           padding: "0.8rem 2.5rem",
-          borderRadius: "0.8rem",
+          borderRadius: "1rem",
           backgroundColor: isActive ? `${highlightColor}15` : "transparent",
+          border: isActive ? `1px solid ${highlightColor}40` : "none",
           transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
           width: isActive ? "auto" : "85%",
           maxWidth: isActive ? "95%" : "90%",
-          backdropFilter: isActive ? "blur(6px)" : "none",
+          backdropFilter: isActive ? "blur(8px)" : "none",
           position: "relative",
-          boxShadow: isActive ? `0 4px 20px ${highlightColor}30` : "none",
+          boxShadow: isActive
+            ? `0 4px 15px -3px ${highlightColor}30, 0 2px 4px -2px ${highlightColor}20`
+            : "none",
           lineHeight: 1.4,
           height: "auto",
           whiteSpace: "pre-wrap",
@@ -113,6 +98,20 @@ export const MyComposition: React.FC<LyricsProps> = ({
           alignItems: "center",
           justifyContent: "center",
           transformOrigin: "center center",
+          // Display the timestamp if active (shadcn style)
+          ...(isActive &&
+            lyric.time && {
+              "&::after": {
+                content: `"${lyric.time}"`,
+                position: "absolute",
+                bottom: "-1.5rem",
+                right: "1rem",
+                fontSize: "0.75rem",
+                opacity: 0.7,
+                color: highlightColor,
+                fontFamily: "monospace",
+              },
+            }),
         }}
       >
         {lyric.text}
@@ -129,7 +128,7 @@ export const MyComposition: React.FC<LyricsProps> = ({
         fontFamily,
         display: "flex",
         flexDirection: "column",
-        background: `linear-gradient(135deg, ${backgroundColor} 0%, ${highlightColor} 100%)`,
+        background: `radial-gradient(circle at 50% 50%, ${backgroundColor} 0%, hsl(220 10% 8%) 90%)`,
       }}
     >
       <div

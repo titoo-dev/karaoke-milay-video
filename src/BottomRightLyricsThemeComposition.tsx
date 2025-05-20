@@ -11,7 +11,7 @@ import {
 } from "remotion";
 import { LyricsProps } from "./schema";
 
-export const MyComposition: React.FC<LyricsProps> = ({
+export const BottomRightLyricsThemeComposition: React.FC<LyricsProps> = ({
   lyrics,
   fontFamily = "Inter, system-ui, sans-serif",
   backgroundColor = "hsl(0 0% 7%)",

@@ -18,6 +18,7 @@ export const LyricsPropsSchema = z.object({
   backgroundColor: z.string().optional().default("hsl(0 0% 20%)"),
   textColor: z.string().optional().default("hsl(0 0% 98%)"),
   highlightColor: z.string().optional().default("hsl(142.1 76.2% 36.3%)"),
+  backgroundImage: z.string().optional(),
 });
 
 export type LyricsProps = z.infer<typeof LyricsPropsSchema>;
